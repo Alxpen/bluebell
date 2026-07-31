@@ -1,0 +1,32 @@
+name: "bluebell"
+mode: "dev"          # 运行模式：dev 开发模式 / release 发布模式
+port: 8084           # 服务端口
+version: "v0.0.1"
+start_time: "2020-07-01"   # 雪花算法的起始时间
+machine_id: 1              # 雪花算法的机器ID
+
+auth:
+  jwt_expire: 8760         # JWT 过期时间（小时）
+
+log:
+  level: "info"
+  filename: "web_app.log"
+  max_size: 200            # 单个日志文件最大大小（MB）
+  max_age: 30              # 日志保留天数
+  max_backups: 7           # 最多保留的旧日志数
+
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  user: "root"
+  password: "root123456"
+  dbname: "bluebell"
+  max_open_conns: 200      # 最大打开连接数
+  max_idle_conns: 50       # 最大空闲连接数
+  
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 100           # 连接池大小
