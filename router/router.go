@@ -1,6 +1,7 @@
 package router
 
 import (
+	"bluebell/controller"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +20,6 @@ func SetupRouter(mode string) *gin.Engine {
 	})
 
 	r.POST("/signup", controller.SignUpHandler)
-
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
