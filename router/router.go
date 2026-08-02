@@ -2,8 +2,16 @@ package router
 
 import (
 	"bluebell/controller"
+	"bluebell/logger"
+	"bluebell/middlewares"
 	"net/http"
 
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+
+	_ "bluebell/docs"
+
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,11 +23,36 @@ func SetupRouter(mode string) *gin.Engine {
 
 	r := gin.New()
 
+	r.Use(logger.GinLogger(), logger.GinRecovery(true))
+
+	r.LoadHTMLFiles("./templates/index.html")
+	r.Static("/static", "./static")
+
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
 
-	r.POST("/signup", controller.SignUpHandler)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	v1 := r.Group("/api/v1")
+
+	v1.POST("/signup", controller.SignUpHandler)
+	v1.POST("/login", controller.LoginHandler)
+	v1.GET("/community", controller.CommunityHandler)
+	v1.GET("/community/:id", controller.CommunityDetailHandler)
+	v1.GET("/post/:id", controller.GetPostDetailHandler)
+
+	v1.Use(middlewares.JWTAuthMiddleware())
+	{
+		v1.POST("/post", controller.CreatePostHandler)
+		v1.POST("/vote", controller.PostVoteHandler)
+	}
+
+	pprof.Register(r)
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
