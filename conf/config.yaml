@@ -30,3 +30,4 @@ redis:
   password: ""
   db: 0
   pool_size: 100           # 连接池大小
+  min_idle-conns: 10       # 最小空闲连接数

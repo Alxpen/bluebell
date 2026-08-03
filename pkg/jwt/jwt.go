@@ -19,7 +19,7 @@ type MyClaims struct {
 func GenToken(userID int64, username string) (string, error) {
 	c := MyClaims{
 		userID,
-		"username",
+		username,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(
 				time.Duration(viper.GetInt("auth.jwt_expire")) * time.Hour).Unix(),
