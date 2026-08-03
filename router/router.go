@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
+	swaggerFiles "github.com/swaggo/files"
 
 	_ "bluebell/docs"
 
@@ -49,7 +49,7 @@ func SetupRouter(mode string) *gin.Engine {
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.POST("/post", controller.CreatePostHandler)
-		v1.POST("/vote", controller.PostVoteHandler)
+		v1.POST("/vote", controller.PostVoteController)
 	}
 
 	pprof.Register(r)
